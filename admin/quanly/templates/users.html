@@ -5,266 +5,96 @@
   <title>Quản lý người dùng</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 0;
-    }
+    body { font-family:"Poppins", sans-serif; background:#f0f2f5; margin:0; padding:0; }
+    .container-fluid { max-width:1200px; margin:50px auto; background:#fff; padding:35px; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.1); }
+    h3 { color:#2c3e50; margin-bottom:25px; font-weight:600; border-left:5px solid #007bff; padding-left:10px; }
 
-    .container-fluid {
-      max-width: 1200px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 35px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      animation: fadeIn 0.5s ease;
-    }
+    .form-inline { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; align-items:center; justify-content:space-between; }
+    .form-inline input, .form-inline select { flex:1; padding:10px 12px; border:1px solid #ccc; border-radius:8px; background:#fafafa; }
+    .form-inline button { background:linear-gradient(45deg,#007bff,#00a2ff); color:#fff; border:none; padding:10px 25px; border-radius:8px; cursor:pointer; font-weight:600; }
 
-    h3 {
-      color: #2c3e50;
-      margin-bottom: 25px;
-      font-weight: 600;
-      border-left: 5px solid #007bff;
-      padding-left: 10px;
-    }
+    .filter-form { display:flex; gap:10px; margin-bottom:15px; align-items:center; }
+    .filter-form select { padding:10px 12px; border:1px solid #ccc; border-radius:8px; background:#fafafa; }
+    .filter-form button { background:#28a745; color:#fff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:600; }
+    .filter-form a { margin-left:10px; color:#fff; background:#6c757d; padding:10px 20px; border-radius:8px; text-decoration:none; }
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
+    table { width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+    table th, table td { padding:12px 15px; text-align:center; }
+    table thead { background:#007bff; color:#fff; font-weight:600; text-transform:uppercase; }
+    table tbody tr:hover{background:#e9f3ff;}
+    .btn-edit{background:#ffc107;color:#fff;padding:5px 10px;border-radius:6px;text-decoration:none;}
+    .btn-delete{background:#dc3545;color:#fff;padding:5px 10px;border-radius:6px;text-decoration:none;}
 
-    /* --- Form thêm người dùng --- */
-    .form-inline {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
-      align-items: center;
-      justify-content: space-between;
-    }
+    /* Highlight theo vai trò */
+    .role-admin { background:#fff3cd; }
+    .role-recruiter { background:#d1ecf1; }
+    .role-applicant { background:#e2e3e5; }
 
-    .form-inline input,
-    .form-inline select {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      transition: 0.2s;
-      background: #fafafa;
-    }
-
-    .form-inline input:focus,
-    .form-inline select:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 3px rgba(0,123,255,0.3);
-      background: #fff;
-    }
-
-    .form-inline button {
-      background: linear-gradient(45deg, #007bff, #00a2ff);
-      color: #fff;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-      font-weight: 600;
-      box-shadow: 0 3px 10px rgba(0,123,255,0.3);
-    }
-
-    .form-inline button:hover {
-      background: linear-gradient(45deg, #0062cc, #0080d6);
-    }
-
-    /* --- Bảng người dùng --- */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    table th, table td {
-      padding: 12px 15px;
-      text-align: center;
-    }
-
-    table thead {
-      background: #007bff;
-      color: #fff;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    table tbody tr {
-      transition: background 0.2s;
-    }
-
-    table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    table tbody tr:hover {
-      background-color: #e9f3ff;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 6px 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 0.9em;
-      background: #fafafa;
-    }
-
-    select {
-      padding: 6px 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background: #fafafa;
-    }
-
-    /* --- Buttons --- */
-    input[type="submit"],
-    .btn {
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 0.85em;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-
-    input[type="submit"] {
-      background: #007bff;
-    }
-    input[type="submit"]:hover {
-      background: #0056b3;
-    }
-
-    .btn-edit {
-      background-color: #ffc107;
-    }
-    .btn-edit:hover {
-      background-color: #e0a800;
-    }
-
-    .btn-delete {
-      background-color: #dc3545;
-    }
-    .btn-delete:hover {
-      background-color: #c82333;
-    }
-
-    /* --- Flash messages --- */
-    .flash-message {
-      padding: 12px 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      color: #fff;
-      font-weight: 500;
-      animation: fadeIn 0.5s ease;
-    }
-    .flash-success { background: #28a745; }
-    .flash-danger { background: #dc3545; }
-
-    /* --- Responsive --- */
-    @media (max-width: 768px) {
-      .form-inline {
-        flex-direction: column;
-      }
-      table th, table td {
-        font-size: 0.85em;
-      }
-    }
   </style>
 </head>
-
 <body>
-<section class="content">
-  <div class="container-fluid">
-    <h3><i class="fa-solid fa-users"></i> Quản lý người dùng</h3>
+<div class="container-fluid">
+  <h3><i class="fa-solid fa-users"></i> Quản lý người dùng</h3>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="flash-message flash-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
-    <form method="get" style="margin-bottom:15px; display:flex; align-items:center; gap:10px;">
-      <label>Lọc theo vai trò:</label>
-      <select name="status" onchange="this.form.submit()">
-        <option value="" {% if filter_status is none %}selected{% endif %}>Tất cả</option>
-        <option value="1" {% if filter_status==1 %}selected{% endif %}>Admin</option>
-        <option value="2" {% if filter_status==2 %}selected{% endif %}>CTV</option>
-        <option value="0" {% if filter_status==0 %}selected{% endif %}>User</option>
-      </select>
-      <noscript><input type="submit" value="Lọc"></noscript>
-    </form>
+  <form class="filter-form" method="GET" action="{{ url_for('users') }}">
+    <select name="role">
+      <option value="">-- Lọc theo vai trò --</option>
+      <option value="applicant" {% if filter_role=='applicant' %}selected{% endif %}>Applicant</option>
+      <option value="recruiter" {% if filter_role=='recruiter' %}selected{% endif %}>Recruiter</option>
+      <option value="admin" {% if filter_role=='admin' %}selected{% endif %}>Admin</option>
+    </select>
+    <button type="submit"><i class="fa-solid fa-filter"></i> Lọc</button>
+    {% if filter_role %}
+      <a href="{{ url_for('users') }}">Xóa lọc</a>
+    {% endif %}
+  </form>
 
-    <!-- Form thêm người dùng -->
-    <form class="form-inline" action="{{ url_for('add_user') }}" method="POST">
-      <input type="text" name="name" placeholder="Tên người dùng" required>
-      <input type="email" name="mail" placeholder="Email" required>
-      <input type="password" name="pass" placeholder="Mật khẩu" required>
-      <select name="status">
-        <option value="0">User</option>
-        <option value="1">Admin</option>
-        <option value="2">CTV</option>
-      </select>
-      <button type="submit"><i class="fa-solid fa-plus"></i> Thêm</button>
-    </form>
+  <form class="form-inline" method="POST" action="{{ url_for('add_user') }}">
+    <input type="text" name="full_name" placeholder="Họ và tên" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Mật khẩu" required>
+    <select name="role">
+      <option value="applicant">Applicant</option>
+      <option value="recruiter">Recruiter</option>
+      <option value="admin">Admin</option>
+    </select>
+    <button type="submit"><i class="fa-solid fa-plus"></i> Thêm</button>
+  </form>
 
-    <!-- Bảng người dùng -->
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Tên</th>
-          <th>Email</th>
-          <th>Mật khẩu</th>
-          <th>Vai trò</th>
-          <th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for u in users %}
-        <tr>
-          <td>{{ u.id }}</td>
-          <td>
-            <form action="{{ url_for('fix_user') }}" method="POST" style="display:flex; gap:5px; justify-content:center;">
-              <input type="hidden" name="mail" value="{{ u.mail }}">
-              <input type="text" name="name" value="{{ u.name }}">
-          </td>
-          <td>{{ u.mail }}</td>
-          <td><input type="password" name="pass" value="{{ u.pass }}"></td>
-          <td>
-            <select name="status">
-              <option value="0" {% if u.status==0 %}selected{% endif %}>User</option>
-              <option value="1" {% if u.status==1 %}selected{% endif %}>Admin</option>
-              <option value="2" {% if u.status==2 %}selected{% endif %}>CTV</option>
-            </select>
-          </td>
-          <td>
-              <a href="{{ url_for('fix_user_page', mail=u.mail) }}" class="btn btn-edit">Sửa</a>
-              <a href="{{ url_for('delete_user', mail=u.mail) }}" class="btn btn-delete" onclick="return confirm('Xóa người dùng này?');"><i class="fa-solid fa-trash"></i> Xóa</a>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</section>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Họ và tên</th>
+        <th>Email</th>
+        <th>Vai trò</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr class="role-{{ u.role }}">
+        <td>{{ u.id }}</td>
+        <td>{{ u.full_name }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.role }}</td>
+        <td>
+<a href="{{ url_for('fix_user', email=u.email) }}" class="btn-edit">Sửa</a>
+          <a href="{{ url_for('delete_user', email=u.email) }}" class="btn-delete" onclick="return confirm('Xóa người dùng này?');">Xóa</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 </body>
 </html>
