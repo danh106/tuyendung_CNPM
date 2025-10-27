@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Quản trị</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+}
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+.card {
+    flex: 1 1 200px;
+    min-width: 220px;
+    max-width: 250px;
+    background: #fff;
+    border-radius: 15px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    color: #333;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+.card i {
+    font-size: 3em;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+.card h3 {
+    font-weight: 600;
+    font-size: 1.2em;
+}
+@media (max-width: 600px) {
+    .card {
+        padding: 30px 15px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h2 style="text-align:center; margin-bottom:50px;">Dashboard Quản trị</h2>
+    <div class="dashboard-cards">
+        <a href="{{ url_for('users') }}" class="card">
+            <i class="fa-solid fa-users"></i>
+            <h3>Quản lý Người dùng</h3>
+        </a>
+
+    </div>
+</div>
+</body>
+</html>

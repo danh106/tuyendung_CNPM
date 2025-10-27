@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sửa người dùng</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin-2.min.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #fdfbfb, #ebedee);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      padding: 40px 35px;
+      border-radius: 15px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 550px;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    h3 {
+      color: #007bff;
+      font-weight: 600;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+    .back:hover {
+      color: #007bff;
+    }
+    form label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #333;
+    }
+    form input, form select {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: 0.3s;
+    }
+    form input:focus, form select:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0,123,255,0.3);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .flash-message {
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .flash-success { background-color: #28a745; color: #fff; }
+    .flash-danger { background-color: #dc3545; color: #fff; }
+    @media (max-width: 600px) {
+      .card { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <a href="{{ url_for('users') }}" class="back"><i class="fa-solid fa-arrow-left"></i> Quay lại danh sách</a>
+    <h3><i class="fa-solid fa-pen-to-square"></i> Sửa người dùng</h3>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('fix_user') }}" method="POST">
+      <input type="hidden" name="mail" value="{{ user.mail }}">
+      
+      <label>Tên:</label>
+      <input type="text" name="name" value="{{ user.name }}" required>
+
+      <label>Mật khẩu:</label>
+      <input type="password" name="pass" value="{{ user.pass }}" required>
+
+      <label>Vai trò:</label>
+      <select name="status" required>
+        <option value="0" {% if user.status==0 %}selected{% endif %}>User</option>
+        <option value="1" {% if user.status==1 %}selected{% endif %}>Admin</option>
+        <option value="2" {% if user.status==2 %}selected{% endif %}>QTV</option>
+      </select>
+
+      <button type="submit"><i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi</button>
+    </form>
+  </div>
+</body>
+</html>

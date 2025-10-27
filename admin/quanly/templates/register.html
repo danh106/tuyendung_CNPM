@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng ký</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .register-wrapper {
+      display: flex;
+      width: 900px;
+      max-width: 95%;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform: translateY(20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+
+    .register-image {
+      flex: 1;
+      background: url('{{ url_for("static", filename="img/tuyendung.webp") }}') center center / cover no-repeat;
+      position: relative;
+    }
+
+    .register-image::after {
+      content: "";
+      position: absolute;
+      inset:0;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .register-form {
+      flex: 1;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .register-form h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    .register-form input {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1em;
+      transition: all 0.3s;
+      background: #fafafa;
+    }
+
+    .register-form input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 8px rgba(102,126,234,0.3);
+      outline: none;
+      background: #fff;
+    }
+
+    .register-form button {
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(45deg,#667eea,#764ba2);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 1em;
+      margin-top: 10px;
+    }
+
+    .register-form button:hover {
+      background: linear-gradient(45deg,#5563c1,#5c3a8f);
+      transform: translateY(-2px);
+    }
+
+    .register-form p {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .register-form p a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .alert {
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      font-weight: 500;
+      text-align: center;
+    }
+    .success { background: #28a745; color: #fff; }
+    .danger, .error { background: #dc3545; color: #fff; }
+    .info { background: #17a2b8; color: #fff; }
+
+    @media (max-width: 768px) {
+      .register-wrapper { flex-direction: column; border-radius: 15px; }
+      .register-image { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="register-wrapper">
+  <div class="register-image"></div>
+  <div class="register-form">
+    <h2><i class="fa-solid fa-user-plus"></i> Đăng ký</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="alert {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      <div class="input-group">
+        <i class="fa-solid fa-user"></i>
+        <input type="text" name="username" placeholder="Tên đăng nhập" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-envelope"></i>
+        <input type="email" name="email" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" name="password" placeholder="Mật khẩu" required>
+      </div>
+      <button type="submit"><i class="fa-solid fa-right-to-bracket"></i> Đăng ký</button>
+      <p>Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập</a></p>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
